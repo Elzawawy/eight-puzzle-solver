@@ -1,4 +1,4 @@
-import Queue as Q
+import queue as Q
 import time
 import resource
 import sys
@@ -100,6 +100,7 @@ class PuzzleState(object):
 ### Students need to change the method to have the corresponding parameters
 
 def writeOutput():
+    """Write Output"""
     ### Student Code Goes here
 
 def bfs_search(initial_state):
@@ -130,16 +131,16 @@ def test_goal(puzzle_state):
 
 def main():
 
-    sm = sys.argv[1].lower()
+    chosen_algorithm = sys.argv[1].lower()
     begin_state = sys.argv[2].split(",")
     begin_state = tuple(map(int, begin_state))
     size = int(math.sqrt(len(begin_state)))
     hard_state = PuzzleState(begin_state, size)
-    if sm == "bfs":
+    if chosen_algorithm == "bfs":
         bfs_search(hard_state)
-    elif sm == "dfs":
+    elif chosen_algorithm == "dfs":
         dfs_search(hard_state)
-    elif sm == "ast":
+    elif chosen_algorithm == "ast":
         A_star_search(hard_state)
     else:
         print("Enter valid command arguments !")
