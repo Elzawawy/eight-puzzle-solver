@@ -3,6 +3,7 @@ import time
 import resource
 import sys
 import math
+from utils import distance_metrics
 
 #### SKELETON CODE ####
 
@@ -166,7 +167,7 @@ def bfs_search(initial_state):
 
 def dfs_search(initial_state):
     """DFS search"""
-    frontier = queue.LifoQueue() 
+    frontier = queue.LifoQueue()
     frontier.put(initial_state)
     frontier_config = {}
     frontier_config[tuple(initial_state.config)] = True
@@ -194,9 +195,9 @@ def A_star_search(initial_state):
     """A * search"""
     ### STUDENT CODE GOES HERE ###
 
-def calculate_total_cost(state):
+def calculate_total_cost(state,heurstic):
     """calculate the total estimated cost of a state"""
-    
+    return distance_metrics.manhattan_distance(state.config, [0, 1, 2, 3, 4, 5, 6, 7, 8])
 
 def calculate_manhattan_dist(idx, value, n):
     """calculate the manhattan distance of a tile"""
@@ -209,6 +210,17 @@ def test_goal(puzzle_state):
     else:
         return False
 
+def check_solvability(state):
+        """ Checks if the given state is solvable """
+
+        inversion = 0
+        for i in range(len(state)):
+            for j in range(i + 1, len(state)):
+                if (state[i] > state[j]) and state[i] != 0 and state[j] != 0:
+                    inversion += 1
+
+        return inversion % 2 == 0
+
 # Main Function that reads in Input and Runs corresponding Algorithm
 
 def main():
@@ -217,6 +229,9 @@ def main():
     begin_state = sys.argv[2].split(",")
     begin_state = tuple(map(int, begin_state))
     size = int(math.sqrt(len(begin_state)))
+    if(check_solvability(begin_state)== False):
+        print("Not Solvable")
+        return 
     hard_state = PuzzleState(begin_state, size)
 
     start_time = time.time()
