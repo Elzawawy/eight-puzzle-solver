@@ -3,11 +3,76 @@ import time
 import resource
 import sys
 import math
+import heapq
 from utils import distance_metrics
 
 #### SKELETON CODE ####
 
 ## The Class that Represents the Puzzle
+
+class PriorityQueue:
+    """A Queue in which the minimum (or maximum) element (as determined by f and
+    order) is returned first.
+    If order is 'min', the item with minimum f(x) is
+    returned first; if order is 'max', then it is the item with maximum f(x).
+    Also supports dict-like lookup."""
+
+    def __init__(self, order='min', f=lambda x: x):
+        self.heap = []
+
+        if order == 'min':
+            self.f = f
+        elif order == 'max':  # now item with max f(x)
+            self.f = lambda x: -f(x)  # will be popped first
+        else:
+            raise ValueError("order must be either 'min' or 'max'.")
+
+    def append(self, item):
+        """Insert item at its correct position."""
+        heapq.heappush(self.heap, (self.f(item),item))
+
+    def isEmpty(self):
+        if len(self.heap) == 0:
+            return True
+        else:
+            return False
+
+    def extend(self, items):
+        """Insert each item in items at its correct position."""
+        for item in items:
+            self.append(item)
+
+    def pop(self):
+        """Pop and return the item (with min or max f(x) value)
+        depending on the order."""
+        if self.heap:
+            return heapq.heappop(self.heap)[-1]
+        else:
+            raise Exception('Trying to pop from empty PriorityQueue.')
+
+    def __len__(self):
+        """Return current capacity of PriorityQueue."""
+        return len(self.heap)
+
+    def __contains__(self, key):
+        """Return True if the key is in PriorityQueue."""
+        return any([item == key for _, item in self.heap])
+
+    def __getitem__(self, key):
+        """Returns the first value associated with key in PriorityQueue.
+        Raises KeyError if key is not present."""
+        for value, item in self.heap:
+            if item == key:
+                return value
+        raise KeyError(str(key) + " is not in the priority queue")
+
+    def __delitem__(self, key):
+        """Delete the first occurrence of key."""
+        try:
+            del self.heap[[item == key for _, item in self.heap].index(True)]
+        except ValueError:
+            raise KeyError(str(key) + " is not in the priority queue")
+        heapq.heapify(self.heap)
 
 class PuzzleState(object):
 
@@ -194,7 +259,28 @@ def dfs_search(initial_state):
 
 def A_star_search(initial_state):
     """A * search"""
-    ### STUDENT CODE GOES HERE ###
+    frontier = PriorityQueue("min",calculate_total_cost)
+    frontier.append(initial_state)
+    frontier_config = {}
+    frontier_config[tuple(initial_state.config)] = True
+    explored = set()
+    nodes_expanded = 0
+    max_search_depth = 0
+
+    while not frontier.isEmpty():
+        state = frontier.pop()
+        explored.add(state)
+        if test_goal(state):
+            return (state,nodes_expanded,max_search_depth)
+        
+        nodes_expanded += 1
+        for neigbhor in state.expand():
+            if neigbhor not in explored and tuple(neigbhor.config) not in frontier_config:
+                frontier.append(neigbhor)
+            elif tuple(neigbhor.config) in frontier_config:
+                if calculate_total_cost(neigbhor) < calculate_total_cost(frontier_config[tuple(neigbhor.config)]):
+                    frontier.__delitem__(neigbhor)
+                    frontier.append(neigbhor)
 
 def calculate_total_cost(state,heuristic='manhattan'):
     """calculate the total estimated cost of a state"""
@@ -213,9 +299,13 @@ def calculate_total_cost(state,heuristic='manhattan'):
             raise NotImplementedError("No such Heuristic is supported.")
     return sum_heuristic + state.cost
 
-def calculate_manhattan_dist(idx, value, n):
+def calculate_manhattan_dist(current_row,current_col,goal_row,goal_col):
     """calculate the manhattan distance of a tile"""
-    ### STUDENT CODE GOES HERE ###
+    return abs(goal_row - current_row) + abs(goal_col - current_col)
+
+def calculate_euclidean_dist(current_row,current_col,goal_row,goal_col):
+    """calculate the euclidean distance of a tile"""
+    return math.sqrt(pow((goal_row-current_row),2)) + math.sqrt(pow((goal_col-current_col),2))
 
 def test_goal(puzzle_state):
     """test the state is the goal state or not"""
