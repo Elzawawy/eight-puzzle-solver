@@ -5,75 +5,11 @@ import sys
 import math
 import heapq
 from utils import distance_metrics
+from utils.priority_queue import PriorityQueue
 
 #### SKELETON CODE ####
 
 ## The Class that Represents the Puzzle
-
-class PriorityQueue:
-    """A Queue in which the minimum (or maximum) element (as determined by f and
-    order) is returned first.
-    If order is 'min', the item with minimum f(x) is
-    returned first; if order is 'max', then it is the item with maximum f(x).
-    Also supports dict-like lookup."""
-
-    def __init__(self, order='min', f=lambda x: x):
-        self.heap = []
-
-        if order == 'min':
-            self.f = f
-        elif order == 'max':  # now item with max f(x)
-            self.f = lambda x: -f(x)  # will be popped first
-        else:
-            raise ValueError("order must be either 'min' or 'max'.")
-
-    def append(self, item):
-        """Insert item at its correct position."""
-        heapq.heappush(self.heap, (self.f(item),item))
-
-    def isEmpty(self):
-        if len(self.heap) == 0:
-            return True
-        else:
-            return False
-
-    def extend(self, items):
-        """Insert each item in items at its correct position."""
-        for item in items:
-            self.append(item)
-
-    def pop(self):
-        """Pop and return the item (with min or max f(x) value)
-        depending on the order."""
-        if self.heap:
-            return heapq.heappop(self.heap)[1]
-        else:
-            raise Exception('Trying to pop from empty PriorityQueue.')
-
-    def __len__(self):
-        """Return current capacity of PriorityQueue."""
-        return len(self.heap)
-
-    def __contains__(self, key):
-        """Return True if the key is in PriorityQueue."""
-        return any([item == key for _, item in self.heap])
-
-    def __getitem__(self, key):
-        """Returns the first value associated with key in PriorityQueue.
-        Raises KeyError if key is not present."""
-        for value, item in self.heap:
-            if item == key:
-                return value
-        raise KeyError(str(key) + " is not in the priority queue")
-
-    def __delitem__(self, key):
-        """Delete the first occurrence of key."""
-        try:
-            del self.heap[[item == key for _, item in self.heap].index(True)]
-        except ValueError:
-            raise KeyError(str(key) + " is not in the priority queue")
-        heapq.heapify(self.heap)
-
 class PuzzleState(object):
 
     """docstring for PuzzleState"""
@@ -176,6 +112,12 @@ class PuzzleState(object):
                     self.children.append(right_child)        
         return self.children
 
+    def __lt__(self, other):
+        return calculate_total_cost(self) < calculate_total_cost(other)
+
+    def __le__(self, other):
+        return calculate_total_cost(self) <= calculate_total_cost(other)
+
 # Function that Writes to output.txt
 ### Students need to change the method to have the corresponding parameters
 
@@ -245,7 +187,6 @@ def dfs_search(initial_state):
         state = frontier.get()
         explored.add(state.config)
         if test_goal(state):
-            print("goodjob")
             return (state,nodes_expanded,max_search_depth)
         
         nodes_expanded += 1
@@ -267,7 +208,7 @@ def A_star_search(initial_state,heuristic):
     nodes_expanded = 0
     max_search_depth = 0
 
-    while not frontier.isEmpty():
+    while frontier:
         state = frontier.pop()
         explored.add(state)
         if test_goal(state):
@@ -277,6 +218,8 @@ def A_star_search(initial_state,heuristic):
         for neigbhor in state.expand():
             if neigbhor not in explored and tuple(neigbhor.config) not in frontier_config:
                 frontier.append(neigbhor)
+                if neigbhor.cost > max_search_depth:
+                    max_search_depth = neigbhor.cost
             elif neigbhor in frontier:
                 if heuristic(neigbhor) < frontier[neigbhor]:
                     frontier.__delitem__(neigbhor)
