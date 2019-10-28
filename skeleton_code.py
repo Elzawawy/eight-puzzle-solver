@@ -277,10 +277,11 @@ def A_star_search(initial_state,heuristic):
         for neigbhor in state.expand():
             if neigbhor not in explored and tuple(neigbhor.config) not in frontier_config:
                 frontier.append(neigbhor)
-            elif tuple(neigbhor.config) in frontier_config:
+            elif neigbhor in frontier:
                 if heuristic(neigbhor) < frontier[neigbhor]:
                     frontier.__delitem__(neigbhor)
                     frontier.append(neigbhor)
+    return None
 
 def calculate_total_cost(state,heuristic='manhattan'):
     """calculate the total estimated cost of a state"""
@@ -346,7 +347,7 @@ def main():
     elif chosen_algorithm == "dfs":
         final_states = dfs_search(hard_state)
     elif chosen_algorithm == "ast":
-        A_star_search(hard_state, lambda state: calculate_total_cost(state))
+        final_states = A_star_search(hard_state, calculate_total_cost)
     else:
         print("Enter valid command arguments !")
     
