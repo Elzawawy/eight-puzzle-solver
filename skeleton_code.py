@@ -257,9 +257,9 @@ def dfs_search(initial_state):
                     max_search_depth = neighbor.cost
     return None
 
-def A_star_search(initial_state):
+def A_star_search(initial_state,heuristic):
     """A * search"""
-    frontier = PriorityQueue('min',calculate_total_cost)
+    frontier = PriorityQueue('min',heuristic)
     frontier.append(initial_state)
     frontier_config = {}
     frontier_config[tuple(initial_state.config)] = True
@@ -278,7 +278,7 @@ def A_star_search(initial_state):
             if neigbhor not in explored and tuple(neigbhor.config) not in frontier_config:
                 frontier.append(neigbhor)
             elif tuple(neigbhor.config) in frontier_config:
-                if calculate_total_cost(neigbhor) < calculate_total_cost(frontier_config[tuple(neigbhor.config)]):
+                if heuristic(neigbhor) < frontier[neigbhor]:
                     frontier.__delitem__(neigbhor)
                     frontier.append(neigbhor)
 
@@ -346,7 +346,7 @@ def main():
     elif chosen_algorithm == "dfs":
         final_states = dfs_search(hard_state)
     elif chosen_algorithm == "ast":
-        A_star_search(hard_state)
+        A_star_search(hard_state, lambda state: calculate_total_cost(state))
     else:
         print("Enter valid command arguments !")
     
