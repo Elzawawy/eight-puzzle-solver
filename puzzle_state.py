@@ -1,3 +1,8 @@
+import time
+import resource
+import sys
+import math
+
 class PuzzleState(object):
 
     """docstring for PuzzleState"""
