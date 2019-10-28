@@ -46,7 +46,7 @@ class PriorityQueue:
         """Pop and return the item (with min or max f(x) value)
         depending on the order."""
         if self.heap:
-            return heapq.heappop(self.heap)[-1]
+            return heapq.heappop(self.heap)[1]
         else:
             raise Exception('Trying to pop from empty PriorityQueue.')
 
@@ -259,7 +259,7 @@ def dfs_search(initial_state):
 
 def A_star_search(initial_state):
     """A * search"""
-    frontier = PriorityQueue("min",calculate_total_cost)
+    frontier = PriorityQueue('min',calculate_total_cost)
     frontier.append(initial_state)
     frontier_config = {}
     frontier_config[tuple(initial_state.config)] = True
