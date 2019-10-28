@@ -42,4 +42,7 @@ def a_star_search(initial_state, heuristic):
         for neigbhor in state.expand():
             if neigbhor not in explored and neigbhor not in frontier:
                 frontier.put(neigbhor)
-            #elif neigbhor in frontier:
+            elif neigbhor in frontier:
+                if heuristic(neigbhor) < frontier[neigbhor]:
+                    del frontier[neigbhor]
+                    frontier.append(neigbhor)

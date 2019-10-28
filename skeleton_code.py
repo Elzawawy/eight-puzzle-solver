@@ -24,6 +24,7 @@ class PuzzleState(object):
         self.dimension = n
         self.config = config
         self.children = []
+        self.goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
         for i, item in enumerate(self.config):
             if item == 0:
@@ -195,9 +196,22 @@ def A_star_search(initial_state):
     """A * search"""
     ### STUDENT CODE GOES HERE ###
 
-def calculate_total_cost(state,heurstic):
+def calculate_total_cost(state,heuristic='manhattan'):
     """calculate the total estimated cost of a state"""
-    return distance_metrics.manhattan_distance(state.config, [0, 1, 2, 3, 4, 5, 6, 7, 8])
+    sum_heuristic = 0
+    for i, item in enumerate(state.config):
+        current_row = i // state.n
+        current_col = i % state.n
+        goal_idx = state.goal.index(item)
+        goal_row = goal_idx // state.n
+        goal_col = goal_idx % state.n
+        if(heuristic == 'manhattan'):
+            sum_heuristic += distance_metrics.manhattan_distance(current_row,current_col,goal_row,goal_col)
+        elif(heuristic == 'euclidean'):
+            sum_heuristic += distance_metrics.eculidean_distance(current_row,current_col,goal_row,goal_col)
+        else: 
+            raise NotImplementedError("No such Heuristic is supported.")
+    return sum_heuristic + state.cost
 
 def calculate_manhattan_dist(idx, value, n):
     """calculate the manhattan distance of a tile"""
