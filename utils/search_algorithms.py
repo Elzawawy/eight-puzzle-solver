@@ -1,9 +1,8 @@
-import utils.priority_queue as PriorityQueue
-from puzzle_solver import test_goal
+from utils.priority_queue import PriorityQueue
 import queue
 
-def bfs_search(initial_state):
-    """BFS search"""
+def BFS(initial_state):
+    """ BFS search"""
     frontier = queue.Queue() 
     frontier.put(initial_state)
     frontier_config = {}
@@ -14,12 +13,14 @@ def bfs_search(initial_state):
 
     while not frontier.empty():
         state = frontier.get()
+        print("****** State ******")
+        state.display()
         explored.add(state.config)
-        if test_goal(state):
+        if state.is_goal():
             return (state,nodes_expanded,max_search_depth)
         
         nodes_expanded += 1
-        for neighbor in state.expand(DFS=False):
+        for neighbor in state.expand(RLDU = False):
             if neighbor.config not in explored and tuple(neighbor.config) not in frontier_config:   
                 frontier.put(neighbor)
                 frontier_config[tuple(neighbor.config)] = True
@@ -27,7 +28,7 @@ def bfs_search(initial_state):
                     max_search_depth = neighbor.cost
     return None
 
-def dfs_search(initial_state):
+def DFS(initial_state):
     """DFS search"""
     frontier = queue.LifoQueue()
     frontier.put(initial_state)
@@ -39,8 +40,10 @@ def dfs_search(initial_state):
 
     while not frontier.empty():
         state = frontier.get()
+        print("****** State ******")
+        state.display()
         explored.add(state.config)
-        if test_goal(state):
+        if state.is_goal():
             return (state,nodes_expanded,max_search_depth)
         
         nodes_expanded += 1
@@ -52,9 +55,9 @@ def dfs_search(initial_state):
                     max_search_depth = neighbor.cost
     return None
 
-def A_star_search(initial_state,heuristic):
+def A_STAR(initial_state,heuristic):
     """A * search"""
-    frontier = PriorityQueue.PriorityQueue('min',heuristic)
+    frontier = PriorityQueue('min',heuristic)
     frontier.append(initial_state)
     frontier_config = {}
     frontier_config[tuple(initial_state.config)] = True
@@ -64,14 +67,17 @@ def A_star_search(initial_state,heuristic):
 
     while frontier:
         state = frontier.pop()
+        print("****** State ******")
+        state.display()
         explored.add(state)
-        if test_goal(state):
+        if state.is_goal():
             return (state,nodes_expanded,max_search_depth)
         
         nodes_expanded += 1
-        for neigbhor in state.expand():
+        for neigbhor in state.expand(RLDU= False):
             if neigbhor not in explored and tuple(neigbhor.config) not in frontier_config:
                 frontier.append(neigbhor)
+                frontier_config[tuple(neigbhor.config)] = True
                 if neigbhor.cost > max_search_depth:
                     max_search_depth = neigbhor.cost
             elif neigbhor in frontier:
