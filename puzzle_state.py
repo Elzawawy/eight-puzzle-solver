@@ -2,6 +2,7 @@ import time
 import resource
 import sys
 import math
+from puzzle_solver import calculate_total_cost
 
 class PuzzleState(object):
 
@@ -90,3 +91,9 @@ class PuzzleState(object):
             if right_child is not None:
                 self.children.append(right_child)
         return self.children
+
+    def __lt__(self, other):
+        return calculate_total_cost(self) < calculate_total_cost(other)
+
+    def __le__(self, other):
+        return calculate_total_cost(self) <= calculate_total_cost(other)
