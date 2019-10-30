@@ -28,6 +28,8 @@ class PuzzleSolver(object):
             self.dist_metric = manhattan_distance
         elif(heuristic == 'euclidean'):
             self.dist_metric = eculidean_distance
+        elif(heuristic == None and algorithm != 'ast'):
+            pass
         else:
             raise NotImplementedError("No such Heuristic is supported.")
 
