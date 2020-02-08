@@ -2,6 +2,8 @@
 <p align = 'center'>Made with :heart: by <b>Amr Elzawawy</b> and <b> Rami Khafagi</b></p>
 <p align='center'><img src='https://miro.medium.com/max/924/1*YxeZJzfhW4kn5O5wAGbkIg.gif'/></p>
 
+This work was developed in assignment 1 for *AI Course Fall 2019/2020 offering at AlexU Faculty of Engineering*.
+
 ## About 8-Puzzle Game
 An instance of the 8-puzzle game consists of a board holding 8 distinct movable
 tiles, plusan empty space. For any such board, the empty space may be legally
@@ -12,6 +14,7 @@ this state to the goal state; that is, the configuration with all tiles arranged
 ascending order 0,1,2,3,4,5,6,7,8 .
 
 ## Implementation Structure
+We followed OOP (Object Oriented Paradigm) concepts to construct our code structure. With each object in the list below representing an object in the game world.
 - **Puzzle State**: This class represents the puzzle state at a certain time, it includes: configuration,
 cost, parent node, children nodes.
 - **Puzzle Solver**: It is responsible of solving the input puzzle, and calculating total estimated cost to solve.
