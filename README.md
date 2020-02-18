@@ -32,7 +32,7 @@ wrapper over the standard "heapq" module in Python to add support for delete ite
 
 - **Depth First Search (DFS)**:  It is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root node in the case of a graph) and explores as far as possible along each branch before backtracking.
 
-- **A Star Search (A*)**: It is a graph traversal and path search algorithm, which is often used in computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its. space complexity, as it stores all generated nodes in memory.
+- **A Star Search (A\*)**: It is a graph traversal and path search algorithm, which is often used in computer science due to its completeness, optimality, and optimal efficiency. One major practical drawback is its. space complexity, as it stores all generated nodes in memory.
 
 ## Heuistics used in A* Search
 Tried out both **Eculidean** and **Manhattan** distance metrics for heuristics for A* search.
