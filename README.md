@@ -1,8 +1,7 @@
 # EightPuzzleSolver
-<p align = 'center'>Made with :heart: by <b>Amr Elzawawy</b> and <b> Rami Khafagi</b></p>
 <p align='center'><img src='https://miro.medium.com/max/924/1*YxeZJzfhW4kn5O5wAGbkIg.gif'/></p>
 
-Using informed and uninfromed search algorithms to solve the 8-Puzzle game. This work was developed in assignment 1 for *AI Course Fall 2019/2020 offering at AlexU Faculty of Engineering*.
+Using informed and uninfromed search algorithms to solve the 8-Puzzle game. This team work (me and [@Rami](https://github.com/ramikhafagi96))was developed as assignment 1 for *AI Course Fall 2019/2020 offering at CCE Department, Faculty of Engineering, Alexandria University*.
 
 ## About 8-Puzzle Game
 An instance of the 8-puzzle game consists of a board holding 8 distinct movable
@@ -46,3 +45,7 @@ distance underestimates the cost as it is shorter than Manhattan distance.
 ## References
 1. *[COS 226 Programming Assignment, at Princeton Univeristy](https://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html)*
 2. *[Heap queue (or heapq) library in Python ](https://www.geeksforgeeks.org/heap-queue-or-heapq-in-python/)*
+
+---
+
+<p align = 'center'>Made with :heart: by <b>Amr Elzawawy</b> and <b> Rami Khafagi</b></p>
